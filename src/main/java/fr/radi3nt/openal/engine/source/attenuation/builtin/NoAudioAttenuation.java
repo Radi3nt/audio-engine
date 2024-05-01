@@ -2,11 +2,13 @@ package fr.radi3nt.openal.engine.source.attenuation.builtin;
 
 import fr.radi3nt.maths.components.vectors.implementations.SimpleVector3f;
 import fr.radi3nt.openal.al.AlSoundSource;
-import fr.radi3nt.openal.engine.source.AudioSource;
 import fr.radi3nt.openal.engine.source.attenuation.AudioAttenuation;
 import fr.radi3nt.openal.engine.source.attenuation.SimpleAttenuation;
+import fr.radi3nt.openal.engine.source.sources.sound.AlSoundSourceHolder;
 import fr.radi3nt.openal.high.gain.PercentModifier;
 import fr.radi3nt.openal.high.gain.SetPercentModifier;
+
+import java.util.Collection;
 
 public class NoAudioAttenuation extends SimpleAttenuation implements AudioAttenuation {
 
@@ -16,14 +18,15 @@ public class NoAudioAttenuation extends SimpleAttenuation implements AudioAttenu
     }
 
     @Override
-    public void set(AudioSource audioSource, AlSoundSource source) {
+    public void added(AlSoundSourceHolder sourceHolder) {
+        AlSoundSource source = sourceHolder.getSource();
         source.setRelativeToListener(true);
         source.setPosition(new SimpleVector3f());
         source.setVelocity(new SimpleVector3f());
     }
 
     @Override
-    public void update(AudioSource audioSource, AlSoundSource source) {
+    public void update(Collection<? extends AlSoundSourceHolder> source) {
 
     }
 
