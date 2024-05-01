@@ -15,8 +15,8 @@ import fr.radi3nt.openal.engine.source.handle.SoundHandle;
 import fr.radi3nt.openal.engine.source.playback.AudioPlayback;
 import fr.radi3nt.openal.engine.source.playback.KeepSoundBankAudioPlayback;
 import fr.radi3nt.openal.engine.source.playback.StreamingSoundBankAudioPlayback;
-import fr.radi3nt.openal.engine.source.sources.multiple.MultipleAudioSource;
-import fr.radi3nt.openal.engine.source.sources.multiple.ReusingSourcePool;
+import fr.radi3nt.openal.engine.source.sources.source.MultipleAudioSource;
+import fr.radi3nt.openal.engine.source.sources.unit.pool.ReusingUnitSoundSourcePool;
 import fr.radi3nt.openal.high.AudioEngine;
 import fr.radi3nt.openal.high.bank.keep.EncapsulatingKeepSoundBank;
 import fr.radi3nt.openal.high.bank.keep.KeepSoundBank;
@@ -59,8 +59,8 @@ public class MainOpenAL {
             public void run() {
                 AudioListener audioListener = InstanceAudioListener.INSTANCE;
 
-                AudioSource music = new MultipleAudioSource(new ReusingSourcePool(), NoAudioAttenuation.INSTANCE, soundClip -> new StreamingSoundBankAudioPlayback(stbStreamingSoundBank, 2048 * 8, 3));
-                AudioSource audioSource = new MultipleAudioSource(new ReusingSourcePool(), new ManualPositionalAudioAttenuation(() -> {
+                AudioSource music = new MultipleAudioSource(new ReusingUnitSoundSourcePool(), NoAudioAttenuation.INSTANCE, soundClip -> new StreamingSoundBankAudioPlayback(stbStreamingSoundBank, 2048 * 8, 3));
+                AudioSource audioSource = new MultipleAudioSource(new ReusingUnitSoundSourcePool(), new ManualPositionalAudioAttenuation(() -> {
                     return new SimpleVector3f(Math.cos(t[0]) * 10, 0, Math.sin(t[0]) * 10);
                 }, () -> {
                     return new SimpleVector3f(-Math.sin(t[0]) * 5 * 1, 0, Math.cos(t[0]) * 5 * 1);

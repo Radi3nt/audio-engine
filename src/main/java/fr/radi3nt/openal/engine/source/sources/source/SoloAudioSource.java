@@ -1,11 +1,11 @@
-package fr.radi3nt.openal.engine.source.sources;
+package fr.radi3nt.openal.engine.source.sources.source;
 
 import fr.radi3nt.openal.engine.clip.SoundClip;
 import fr.radi3nt.openal.engine.source.AudioSource;
 import fr.radi3nt.openal.engine.source.attenuation.AudioAttenuation;
 import fr.radi3nt.openal.engine.source.handle.SoundHandle;
 import fr.radi3nt.openal.engine.source.playback.AudioPlayback;
-import fr.radi3nt.openal.engine.source.sources.sound.SoundSource;
+import fr.radi3nt.openal.engine.source.sources.unit.UnitSoundSource;
 import fr.radi3nt.openal.high.gain.PercentModifier;
 
 import java.util.Collections;
@@ -13,11 +13,11 @@ import java.util.Collections;
 public class SoloAudioSource implements AudioSource {
 
     private final AudioAttenuation audioAttenuation;
-    private final SoundSource source;
+    private final UnitSoundSource source;
 
     public SoloAudioSource(AudioAttenuation audioAttenuation, AudioPlayback playbackModule) {
         this.audioAttenuation = audioAttenuation;
-        source = new SoundSource(audioAttenuation, playbackModule);
+        source = new UnitSoundSource(audioAttenuation, playbackModule);
 
         audioAttenuation.added(source);
     }

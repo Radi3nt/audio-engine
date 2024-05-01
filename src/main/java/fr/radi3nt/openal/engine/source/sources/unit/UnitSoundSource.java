@@ -1,16 +1,17 @@
-package fr.radi3nt.openal.engine.source.sources.sound;
+package fr.radi3nt.openal.engine.source.sources.unit;
 
 import fr.radi3nt.openal.al.AlSoundSource;
 import fr.radi3nt.openal.engine.clip.SoundClip;
 import fr.radi3nt.openal.engine.source.attenuation.AudioAttenuation;
 import fr.radi3nt.openal.engine.source.handle.SoundHandle;
 import fr.radi3nt.openal.engine.source.playback.AudioPlayback;
+import fr.radi3nt.openal.engine.source.sources.AlSoundSourceHolder;
 import fr.radi3nt.openal.high.gain.ParentPercentModifier;
 import fr.radi3nt.openal.high.gain.PercentModifier;
 
 import java.util.ArrayList;
 
-public class SoundSource implements AlSoundSourceHolder {
+public class UnitSoundSource implements AlSoundSourceHolder {
 
     private final AudioPlayback playbackModule;
 
@@ -20,13 +21,13 @@ public class SoundSource implements AlSoundSourceHolder {
     private final ParentPercentModifier currentSoundGain = new ParentPercentModifier(new ArrayList<>());
     private final ParentPercentModifier currentSoundPitch = new ParentPercentModifier(new ArrayList<>());
 
-    private final HandledSource handledSource;
+    private final HandledSoundSource handledSource;
 
-    public SoundSource(AudioAttenuation audioAttenuation, AudioPlayback playbackModule) {
-        this(audioAttenuation, playbackModule, new HandledSource());
+    public UnitSoundSource(AudioAttenuation audioAttenuation, AudioPlayback playbackModule) {
+        this(audioAttenuation, playbackModule, new HandledSoundSource());
     }
 
-    public SoundSource(AudioAttenuation audioAttenuation, AudioPlayback playbackModule, HandledSource source) {
+    public UnitSoundSource(AudioAttenuation audioAttenuation, AudioPlayback playbackModule, HandledSoundSource source) {
         this.playbackModule = playbackModule;
         this.handledSource = source;
 
@@ -64,11 +65,11 @@ public class SoundSource implements AlSoundSourceHolder {
         return handledSource.getSource();
     }
 
-    public HandledSource getHandledSource() {
+    public HandledSoundSource getHandledSource() {
         return handledSource;
     }
 
-    public boolean isDone() {
+    public boolean isCompleted() {
         return handledSource.isDone();
     }
 }

@@ -1,21 +1,22 @@
-package fr.radi3nt.openal.engine.source.sources.sound;
+package fr.radi3nt.openal.engine.source.sources.unit;
 
 import fr.radi3nt.openal.al.AlSoundSource;
 import fr.radi3nt.openal.engine.source.handle.SoundHandle;
 import fr.radi3nt.openal.engine.source.playback.AudioPlayback;
 import fr.radi3nt.openal.engine.source.sources.SoloSoundHandle;
+import fr.radi3nt.openal.engine.source.sources.AlSoundSourceHolder;
 import fr.radi3nt.openal.high.gain.PercentModifier;
 
-public class HandledSource implements AlSoundSourceHolder {
+public class HandledSoundSource implements AlSoundSourceHolder {
 
     private final AlSoundSource alSoundSource;
     private SoloSoundHandle currentHandle;
 
-    public HandledSource() {
+    public HandledSoundSource() {
         this(new AlSoundSource());
     }
 
-    public HandledSource(AlSoundSource source) {
+    public HandledSoundSource(AlSoundSource source) {
         this.alSoundSource = source;
     }
 

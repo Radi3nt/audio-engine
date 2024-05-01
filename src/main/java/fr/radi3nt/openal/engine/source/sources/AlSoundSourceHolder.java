@@ -1,4 +1,4 @@
-package fr.radi3nt.openal.engine.source.sources.sound;
+package fr.radi3nt.openal.engine.source.sources;
 
 import fr.radi3nt.openal.al.AlSoundSource;
 

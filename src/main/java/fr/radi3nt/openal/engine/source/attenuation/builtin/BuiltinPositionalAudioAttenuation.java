@@ -5,7 +5,7 @@ import fr.radi3nt.openal.al.AlSoundSource;
 import fr.radi3nt.openal.engine.source.attenuation.AudioAttenuation;
 import fr.radi3nt.openal.engine.source.attenuation.PositionalAttenuation;
 import fr.radi3nt.openal.engine.source.attenuation.SimpleAttenuation;
-import fr.radi3nt.openal.engine.source.sources.sound.AlSoundSourceHolder;
+import fr.radi3nt.openal.engine.source.sources.AlSoundSourceHolder;
 import fr.radi3nt.openal.high.gain.PercentModifier;
 import fr.radi3nt.openal.high.gain.SetPercentModifier;
 
