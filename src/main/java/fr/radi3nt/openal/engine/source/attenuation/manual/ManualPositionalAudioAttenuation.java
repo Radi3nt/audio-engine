@@ -4,14 +4,15 @@ import fr.radi3nt.maths.components.advanced.quaternions.Quaternion;
 import fr.radi3nt.maths.components.vectors.Vector3f;
 import fr.radi3nt.maths.components.vectors.implementations.SimpleVector3f;
 import fr.radi3nt.openal.al.AlSoundSource;
-import fr.radi3nt.openal.engine.source.AudioSource;
 import fr.radi3nt.openal.engine.source.attenuation.SimpleAttenuation;
 import fr.radi3nt.openal.engine.source.attenuation.manual.formula.AttenuationFormula;
 import fr.radi3nt.openal.engine.source.attenuation.manual.listener.AudioListener;
 import fr.radi3nt.openal.engine.source.attenuation.manual.spatialization.SpatializationFormula;
+import fr.radi3nt.openal.engine.source.sources.AlSoundSourceHolder;
 import fr.radi3nt.openal.high.gain.PercentModifier;
 import fr.radi3nt.openal.high.gain.SetPercentModifier;
 
+import java.util.Collection;
 import java.util.function.Supplier;
 
 public class ManualPositionalAudioAttenuation extends SimpleAttenuation {
@@ -51,22 +52,24 @@ public class ManualPositionalAudioAttenuation extends SimpleAttenuation {
     }
 
     @Override
-    public void set(AudioSource audioSource, AlSoundSource source) {
-
-    }
-
-    @Override
-    public void update(AudioSource audioSource, AlSoundSource source) {
+    public void added(AlSoundSourceHolder sourceHolder) {
+        AlSoundSource source = sourceHolder.getSource();
         source.setRelativeToListener(true);
         source.setVelocity(new SimpleVector3f());
         source.setReferenceDist(5);
         source.setMaximumDist(5);
+    }
 
+    @Override
+    public void update(Collection<? extends AlSoundSourceHolder> sources) {
         Quaternion inverseOrientation = audioListener.getInverseOrientation();
 
         Vector3f position = this.position.get();
         Vector3f relativePos = spatializationFormula.spatialize(inverseOrientation, audioListener.getPosition(), position);
-        source.setPosition(relativePos);
+
+        for (AlSoundSourceHolder source : sources) {
+            source.getSource().setPosition(relativePos);
+        }
 
         gain.setTransform(attenuationFormula.attenuate(audioListener.getPosition(), position));
         pitch.setTransform(spatializationFormula.dopplerEffect(audioListener.getPosition(), position, audioListener.getVelocity(), velocity.get()));
