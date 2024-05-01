@@ -20,7 +20,8 @@ public class SoloSoundHandle implements SoundHandle {
 
     @Override
     public void stop() {
-        playbackModule.stop();
+        if (!done)
+            playbackModule.stop();
     }
 
     @Override
@@ -34,7 +35,8 @@ public class SoloSoundHandle implements SoundHandle {
 
     @Override
     public void setLooping(boolean looping) {
-        playbackModule.setLooping(looping);
+        if (!done)
+            playbackModule.setLooping(looping);
     }
 
     @Override
