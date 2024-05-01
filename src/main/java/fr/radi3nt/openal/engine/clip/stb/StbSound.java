@@ -21,13 +21,15 @@ public class StbSound {
     public final int channels;
     public final int sampleRate;
     public final int sampleLength;
+    private final ByteBuffer encoded;
     private final long memoryHandle;
 
-    public StbSound(long memoryHandle, int channels, int sampleRate, int sampleLength) {
+    public StbSound(long memoryHandle, int channels, int sampleRate, int sampleLength, ByteBuffer encoded) {
         this.memoryHandle = memoryHandle;
         this.channels = channels;
         this.sampleRate = sampleRate;
         this.sampleLength = sampleLength;
+        this.encoded = encoded;
     }
 
     public static StbSound from(ReadableFile readableFile) throws IOException {
@@ -52,7 +54,7 @@ public class StbSound {
         }
 
         int samplesLength = stb_vorbis_stream_length_in_samples(handle);
-        return new StbSound(handle, channels, sampleRate, samplesLength);
+        return new StbSound(handle, channels, sampleRate, samplesLength, encoded);
     }
 
     public static ByteBuffer ioResourceToByteBuffer(ReadableFile resource) throws IOException {
@@ -78,7 +80,15 @@ public class StbSound {
     }
 
     public synchronized void seek(int sampleIndex) {
-        stb_vorbis_seek(memoryHandle, sampleIndex);
+        try (MemoryStack stack = stackPush()) {
+            IntBuffer error = stack.mallocInt(1);
+            stb_vorbis_seek(memoryHandle, sampleIndex);
+
+            int currentError = error.get(0);
+            if (currentError==VORBIS__no_error || currentError==VORBIS_need_more_data)
+                return;
+            System.out.println("Error: " + currentError);
+        }
     }
 
     public synchronized void delete() {
