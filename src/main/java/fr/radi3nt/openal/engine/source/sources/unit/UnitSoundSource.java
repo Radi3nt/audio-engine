@@ -50,9 +50,16 @@ public class UnitSoundSource implements AlSoundSourceHolder {
         currentSoundPitch.getModifiers().clear();
         currentSoundPitch.getModifiers().add(pitch);
 
+        setGainAndPitch();
+
         playbackModule.play();
 
         return handledSource.setHandle(playbackModule, gain, pitch);
+    }
+
+    private void setGainAndPitch() {
+        handledSource.getSource().setGain(globalSourceGain.percentModifier());
+        handledSource.getSource().setPitch(globalSourcePitch.percentModifier());
     }
 
     public void update() {
