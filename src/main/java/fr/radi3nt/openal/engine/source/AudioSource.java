@@ -10,7 +10,7 @@ public interface AudioSource {
     SoundHandle play(SoundClip clip, PercentModifier gain, PercentModifier pitch);
 
     default SoundHandle play(SoundClip clip, float gain, float pitch) {
-        return play(clip, new SetPercentModifier(1f), new SetPercentModifier(1f));
+        return play(clip, new SetPercentModifier(gain), new SetPercentModifier(pitch));
     }
 
     default SoundHandle play(SoundClip clip) {
