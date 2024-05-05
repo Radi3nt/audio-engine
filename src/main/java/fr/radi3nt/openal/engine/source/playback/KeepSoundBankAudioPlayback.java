@@ -21,6 +21,7 @@ public class KeepSoundBankAudioPlayback implements AudioPlayback {
             stop();
         this.source = source;
 
+        source.stop();
         source.setBuffer(soundBank.fillBuffer(soundClip).bufferId);
     }
 
@@ -46,7 +47,7 @@ public class KeepSoundBankAudioPlayback implements AudioPlayback {
 
     @Override
     public boolean isPlaying() {
-        return source.isPlaying();
+        return source!=null && source.isPlaying();
     }
 
     @Override

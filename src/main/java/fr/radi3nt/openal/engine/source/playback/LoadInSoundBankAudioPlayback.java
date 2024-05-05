@@ -53,7 +53,7 @@ public class LoadInSoundBankAudioPlayback implements AudioPlayback {
 
     @Override
     public boolean isPlaying() {
-        return source.isPlaying();
+        return source!=null && source.isPlaying();
     }
 
     @Override
