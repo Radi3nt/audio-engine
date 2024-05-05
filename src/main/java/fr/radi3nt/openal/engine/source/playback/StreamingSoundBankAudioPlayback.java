@@ -86,7 +86,7 @@ public class StreamingSoundBankAudioPlayback implements AudioPlayback {
 
     @Override
     public boolean isPlaying() {
-        return playing && (!reachedEnd || source.isPlaying());
+        return source!=null && playing && (!reachedEnd || source.isPlaying());
     }
 
     @Override
