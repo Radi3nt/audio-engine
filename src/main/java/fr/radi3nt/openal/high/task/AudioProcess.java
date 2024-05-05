@@ -14,10 +14,13 @@ public class AudioProcess {
         return audioSource;
     }
 
+    public void remove(AudioSource audioSource) {
+        sources.remove(audioSource);
+    }
+
     public void update() {
         for (AudioSource source : sources) {
             source.update();
         }
     }
-
 }
