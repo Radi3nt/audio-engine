@@ -5,8 +5,8 @@ import fr.radi3nt.openal.engine.source.AudioSource;
 import fr.radi3nt.openal.engine.source.attenuation.AudioAttenuation;
 import fr.radi3nt.openal.engine.source.handle.SoundHandle;
 import fr.radi3nt.openal.engine.source.playback.AudioPlayback;
-import fr.radi3nt.openal.engine.source.sources.unit.pool.UnitSoundSourcePool;
 import fr.radi3nt.openal.engine.source.sources.unit.UnitSoundSource;
+import fr.radi3nt.openal.engine.source.sources.unit.pool.UnitSoundSourcePool;
 import fr.radi3nt.openal.high.gain.PercentModifier;
 
 import java.util.Collection;

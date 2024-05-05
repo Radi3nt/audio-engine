@@ -41,7 +41,6 @@ public class StbLoadInSoundBank implements LoadInSoundBank, StbSoundBank {
 
         sound.delete();
 
-        System.out.println("channels: " + sound.channels);
         SoundFormat soundFormat = new SoundFormat(SoundChannel.from(sound.channels), SoundResolution.BIT_16);
         soundBuffer.fill(pcm, sound.sampleRate, soundFormat.getAlId());
     }

@@ -1,6 +1,5 @@
-package fr.radi3nt.openal.engine.source.sources;
+package fr.radi3nt.openal.engine.source.handle;
 
-import fr.radi3nt.openal.engine.source.handle.SoundHandle;
 import fr.radi3nt.openal.engine.source.playback.AudioPlayback;
 import fr.radi3nt.openal.high.gain.PercentModifier;
 
