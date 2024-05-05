@@ -16,9 +16,10 @@ public class QuaternionSpatializationFormula implements SpatializationFormula {
     }
 
     @Override
-    public Vector3f spatialize(Quaternion inverseOrientation, Vector3f listenerPos, Vector3f currentPos) {
+    public Vector3f spatialize(Quaternion inverseOrientation, Vector3f listenerPos, Vector3f currentPos, Vector3f result) {
+        result.copy(currentPos);
 
-        Vector3f dist = currentPos.duplicate().sub(listenerPos);
+        Vector3f dist = result.sub(listenerPos);
         Vector3f forward = dist.normalizeSafely();
         inverseOrientation.transform(forward);
 

@@ -24,6 +24,8 @@ public class ManualPositionalAudioAttenuation extends SimpleAttenuation {
     private final SetPercentModifier gain = new SetPercentModifier(1f);
     private final SetPercentModifier pitch = new SetPercentModifier(1f);
 
+    private final Vector3f relativePosCache = new SimpleVector3f();
+
     private AttenuationFormula attenuationFormula;
     private SpatializationFormula spatializationFormula;
 
@@ -65,7 +67,7 @@ public class ManualPositionalAudioAttenuation extends SimpleAttenuation {
         Quaternion inverseOrientation = audioListener.getInverseOrientation();
 
         Vector3f position = this.position.get();
-        Vector3f relativePos = spatializationFormula.spatialize(inverseOrientation, audioListener.getPosition(), position);
+        Vector3f relativePos = spatializationFormula.spatialize(inverseOrientation, audioListener.getPosition(), position, relativePosCache);
 
         for (AlSoundSourceHolder source : sources) {
             source.getSource().setPosition(relativePos);
