@@ -1,9 +1,9 @@
 package fr.radi3nt.openal.engine.source.sources.unit;
 
 import fr.radi3nt.openal.al.AlSoundSource;
+import fr.radi3nt.openal.engine.source.handle.SoloSoundHandle;
 import fr.radi3nt.openal.engine.source.handle.SoundHandle;
 import fr.radi3nt.openal.engine.source.playback.AudioPlayback;
-import fr.radi3nt.openal.engine.source.sources.SoloSoundHandle;
 import fr.radi3nt.openal.engine.source.sources.AlSoundSourceHolder;
 import fr.radi3nt.openal.high.gain.PercentModifier;
 
@@ -43,6 +43,10 @@ public class HandledSoundSource implements AlSoundSourceHolder {
     @Override
     public AlSoundSource getSource() {
         return alSoundSource;
+    }
+
+    public SoloSoundHandle getCurrentHandle() {
+        return currentHandle;
     }
 
     public boolean isDone() {
