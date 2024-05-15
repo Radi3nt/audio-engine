@@ -9,17 +9,17 @@ import fr.radi3nt.openal.engine.source.sources.AlSoundSourceHolder;
 import fr.radi3nt.openal.high.gain.ParentPercentModifier;
 import fr.radi3nt.openal.high.gain.PercentModifier;
 
-import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class UnitSoundSource implements AlSoundSourceHolder {
 
     private final AudioPlayback playbackModule;
 
-    private final ParentPercentModifier globalSourceGain = new ParentPercentModifier(new ArrayList<>());
-    private final ParentPercentModifier globalSourcePitch = new ParentPercentModifier(new ArrayList<>());
+    private final ParentPercentModifier globalSourceGain = new ParentPercentModifier(ConcurrentHashMap.newKeySet());
+    private final ParentPercentModifier globalSourcePitch = new ParentPercentModifier(ConcurrentHashMap.newKeySet());
 
-    private final ParentPercentModifier currentSoundGain = new ParentPercentModifier(new ArrayList<>());
-    private final ParentPercentModifier currentSoundPitch = new ParentPercentModifier(new ArrayList<>());
+    private final ParentPercentModifier currentSoundGain = new ParentPercentModifier(ConcurrentHashMap.newKeySet());
+    private final ParentPercentModifier currentSoundPitch = new ParentPercentModifier(ConcurrentHashMap.newKeySet());
 
     private final HandledSoundSource handledSource;
 
