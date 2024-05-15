@@ -1,6 +1,6 @@
 package fr.radi3nt.openal.high.bank.stb;
 
-import fr.radi3nt.file.impl.ResourceFile;
+import fr.radi3nt.file.files.ReadableFile;
 import fr.radi3nt.openal.al.AlSoundBuffer;
 import fr.radi3nt.openal.engine.clip.FileSoundClip;
 import fr.radi3nt.openal.engine.clip.SoundClip;
@@ -50,7 +50,7 @@ public class StbLoadInSoundBank implements LoadInSoundBank, StbSoundBank {
         if (!(soundClip instanceof FileSoundClip))
             throw new IllegalArgumentException("Sound clip doesn't point to a file");
 
-        ResourceFile resourceFile = ((FileSoundClip) soundClip).resourceFile;
+        ReadableFile resourceFile = ((FileSoundClip) soundClip).resourceFile;
         StbSound sound;
         try {
             sound = StbSound.from(resourceFile);

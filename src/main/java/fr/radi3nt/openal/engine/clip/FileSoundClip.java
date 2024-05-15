@@ -1,14 +1,14 @@
 package fr.radi3nt.openal.engine.clip;
 
-import fr.radi3nt.file.impl.ResourceFile;
+import fr.radi3nt.file.files.ReadableFile;
 
 import java.util.Objects;
 
 public class FileSoundClip implements SoundClip {
 
-    public final ResourceFile resourceFile;
+    public final ReadableFile resourceFile;
 
-    public FileSoundClip(ResourceFile resourceFile) {
+    public FileSoundClip(ReadableFile resourceFile) {
         this.resourceFile = resourceFile;
     }
 
