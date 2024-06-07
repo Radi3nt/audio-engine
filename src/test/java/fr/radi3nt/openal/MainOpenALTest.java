@@ -23,13 +23,14 @@ import fr.radi3nt.openal.high.bank.keep.KeepSoundBank;
 import fr.radi3nt.openal.high.bank.stb.StbLoadInSoundBank;
 import fr.radi3nt.openal.high.bank.streaming.StbStreamingSoundBank;
 import fr.radi3nt.timing.TimingUtil;
+import org.junit.jupiter.api.Test;
 
 import java.util.function.Function;
 
-public class MainOpenAL {
+class MainOpenALTest {
 
-
-    public static void main(String[] args) {
+    @Test
+    void testSound() {
         AudioEngine engine = new AudioEngine();
         engine.prepare();
 
@@ -102,9 +103,5 @@ public class MainOpenAL {
 
         TimingUtil.waitMillis(10_000);
 
-
     }
-
-
 }
-
