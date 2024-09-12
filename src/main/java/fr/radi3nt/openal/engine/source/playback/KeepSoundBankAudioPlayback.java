@@ -20,6 +20,7 @@ public class KeepSoundBankAudioPlayback implements AudioPlayback {
         if (this.source != null)
             stop();
         this.source = source;
+        this.source.setLooping(false);
 
         source.stop();
         source.setBuffer(soundBank.fillBuffer(soundClip).bufferId);

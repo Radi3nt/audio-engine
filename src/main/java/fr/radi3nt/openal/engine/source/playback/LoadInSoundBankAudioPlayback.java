@@ -28,6 +28,7 @@ public class LoadInSoundBankAudioPlayback implements AudioPlayback {
 
         soundBank.fillBuffer(soundClip, buffer);
 
+        source.setLooping(false);
         source.setBuffer(buffer.bufferId);
     }
 
