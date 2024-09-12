@@ -80,15 +80,15 @@ public class StbSound {
     }
 
     public synchronized void seek(int sampleIndex) {
+        int currentError;
         try (MemoryStack stack = stackPush()) {
             IntBuffer error = stack.mallocInt(1);
             stb_vorbis_seek(memoryHandle, sampleIndex);
-
-            int currentError = error.get(0);
-            if (currentError==VORBIS__no_error || currentError==VORBIS_need_more_data)
-                return;
-            System.out.println("Error: " + currentError);
+            currentError = error.get(0);
         }
+        if (currentError==VORBIS__no_error || currentError==VORBIS_need_more_data)
+            return;
+        System.out.println("Vorbis error: " + currentError);
     }
 
     public synchronized void delete() {
