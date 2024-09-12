@@ -28,12 +28,17 @@ public class StbStreamingSoundBank implements StreamingSoundBank {
         StbSound sound = stbMap.computeIfAbsent(soundClip, stbSoundBank::getSound);
         ShortBuffer pcm = BufferUtils.createShortBuffer(sound.channels * sampleLength);
 
-        sound.seek(samplePos);
         boolean hitEnd = StbLoadInSoundBank.fillSamples(pcm, sound);
 
         SoundFormat soundFormat = new SoundFormat(SoundChannel.from(sound.channels), SoundResolution.BIT_16);
         soundBuffer.fill(pcm, sound.sampleRate, soundFormat.getAlId());
 
         return hitEnd;
+    }
+
+    @Override
+    public void seekBegin(SoundClip soundClip) {
+        StbSound sound = stbMap.computeIfAbsent(soundClip, stbSoundBank::getSound);
+        sound.seek(0);
     }
 }

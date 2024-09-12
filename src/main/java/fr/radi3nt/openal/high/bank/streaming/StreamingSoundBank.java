@@ -5,4 +5,6 @@ import fr.radi3nt.openal.engine.clip.SoundClip;
 
 public interface StreamingSoundBank {
     boolean fillBuffer(SoundClip soundClip, AlSoundBuffer soundBuffer, int samplePos, int sampleLength);
+
+    void seekBegin(SoundClip soundClip);
 }

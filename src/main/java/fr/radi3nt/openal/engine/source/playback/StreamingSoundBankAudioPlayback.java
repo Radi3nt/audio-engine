@@ -43,6 +43,7 @@ public class StreamingSoundBankAudioPlayback implements AudioPlayback {
             }
         }
 
+        looping = false;
         source.setLooping(false);
     }
 
@@ -68,11 +69,12 @@ public class StreamingSoundBankAudioPlayback implements AudioPlayback {
         for (int i = 0; i < initialBuffers.length; i++) {
             AlSoundBuffer buffer = initialBuffers[i];
             buffers[i] = buffer.bufferId;
-            fillBuffer(buffer);
+            if (fillBuffer(buffer)) {
+                break;
+            }
         }
 
         source.queueBuffer(buffers);
-
         source.play();
     }
 
@@ -103,31 +105,36 @@ public class StreamingSoundBankAudioPlayback implements AudioPlayback {
 
     @Override
     public void update() {
-        if (!(playing && (!reachedEnd || source.isPlaying() || looping)))
+        if (!playing || (reachedEnd && !source.isPlaying() && !looping))
             return;
-
-        if (!source.isPlaying()) {
-            source.play();
-        }
 
         int[] buffers = source.unQueueBuffers();
         boolean done = false;
         for (int i = 0; i < buffers.length; i++) {
             int buffer = buffers[i];
-            done = done || fillBuffer(AlSoundBuffer.from(buffer));
+            if (buffer==0)
+                continue;
             if (done) {
                 buffers[i] = 0;
+                continue;
             }
+            done = fillBuffer(AlSoundBuffer.from(buffer));
         }
         if (done) {
             reachedEnd = true;
         }
+
+        if (!source.isPlaying() && !reachedEnd) {
+            source.play();
+        }
+
         source.queueBuffer(buffers);
     }
 
     private boolean fillBuffer(AlSoundBuffer buffer) {
         boolean done = soundBank.fillBuffer(soundClip, buffer, streamingCurrent * streamingSampleLength, streamingSampleLength);
         if (done && looping) {
+            soundBank.seekBegin(soundClip);
             streamingCurrent = 0;
             return false;
         } else
