@@ -21,8 +21,10 @@ public class StbSound {
     public final int channels;
     public final int sampleRate;
     public final int sampleLength;
-    private final ByteBuffer encoded;
     private final long memoryHandle;
+
+    @SuppressWarnings("All")
+    private final ByteBuffer encoded; //This needs to be kept in memory so that vorbis can use it
 
     public StbSound(long memoryHandle, int channels, int sampleRate, int sampleLength, ByteBuffer encoded) {
         this.memoryHandle = memoryHandle;
