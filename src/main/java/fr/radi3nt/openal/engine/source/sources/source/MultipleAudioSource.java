@@ -28,7 +28,7 @@ public class MultipleAudioSource implements AudioSource {
     }
 
     @Override
-    public synchronized SoundHandle play(SoundClip clip, PercentModifier gain, PercentModifier pitch) {
+    public SoundHandle play(SoundClip clip, PercentModifier gain, PercentModifier pitch) {
         AudioPlayback playback = playbackFactory.apply(clip);
         UnitSoundSource source = sourcePool.borrow(audioAttenuation, playback);
         audioAttenuation.added(source);

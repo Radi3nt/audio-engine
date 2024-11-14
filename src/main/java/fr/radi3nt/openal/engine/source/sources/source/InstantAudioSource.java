@@ -25,7 +25,7 @@ public class InstantAudioSource extends SoloAudioSource {
     }
 
     @Override
-    public synchronized SoundHandle play(SoundClip clip, PercentModifier gain, PercentModifier pitch) {
+    public SoundHandle play(SoundClip clip, PercentModifier gain, PercentModifier pitch) {
         SoundHandle handle = super.play(clip, gain, pitch);
         played = true;
         return handle;

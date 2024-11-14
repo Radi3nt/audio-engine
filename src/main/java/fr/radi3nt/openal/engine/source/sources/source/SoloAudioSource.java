@@ -31,7 +31,7 @@ public class SoloAudioSource implements AudioSource {
     }
 
     @Override
-    public synchronized SoundHandle play(SoundClip clip, PercentModifier gain, PercentModifier pitch) {
+    public SoundHandle play(SoundClip clip, PercentModifier gain, PercentModifier pitch) {
         audioAttenuation.update(Collections.singleton(source));
         return source.play(clip, gain, pitch);
     }

@@ -77,11 +77,11 @@ public class StbSound {
         return byteBuffer;
     }
 
-    public synchronized int getSamples(ShortBuffer pcm) {
+    public int getSamples(ShortBuffer pcm) {
         return stb_vorbis_get_samples_short_interleaved(memoryHandle, channels, pcm);
     }
 
-    public synchronized void seek(int sampleIndex) {
+    public void seek(int sampleIndex) {
         int currentError;
         try (MemoryStack stack = stackPush()) {
             IntBuffer error = stack.mallocInt(1);
@@ -93,7 +93,7 @@ public class StbSound {
         System.out.println("Vorbis error: " + currentError);
     }
 
-    public synchronized void delete() {
+    public void delete() {
         stb_vorbis_close(memoryHandle);
     }
 
