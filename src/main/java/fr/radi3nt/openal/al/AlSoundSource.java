@@ -51,6 +51,10 @@ public class AlSoundSource {
         alSourcei(sourceId, AL_BUFFER, bufferId);
     }
 
+    public void rewind() {
+        alSourceRewind(sourceId);
+    }
+
     public void clearBuffer() {
         alSourcei(sourceId, AL_BUFFER, 0);
     }
@@ -85,6 +89,10 @@ public class AlSoundSource {
 
     public boolean isPlaying() {
         return alGetSourcei(sourceId, AL_SOURCE_STATE) == AL_PLAYING;
+    }
+
+    public boolean isInitialState() {
+        return alGetSourcei(sourceId, AL_SOURCE_STATE) == AL_INITIAL;
     }
 
     public void pause() {

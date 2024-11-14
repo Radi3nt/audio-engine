@@ -17,12 +17,14 @@ public class KeepSoundBankAudioPlayback implements AudioPlayback {
 
     @Override
     public void set(SoundClip soundClip, AlSoundSource source) {
-        if (this.source != null)
+        if (this.source != null && source != this.source)
             stop();
         this.source = source;
         this.source.setLooping(false);
 
-        source.stop();
+        if (!this.source.isInitialState())
+            this.source.rewind();
+
         source.setBuffer(soundBank.fillBuffer(soundClip).bufferId);
     }
 
