@@ -15,6 +15,10 @@ public class QuaternionSpatializationFormula implements SpatializationFormula {
         this.dopplerFactor = dopplerFactor;
     }
 
+    public QuaternionSpatializationFormula() {
+        this(343, 1f);
+    }
+
     @Override
     public Vector3f spatialize(Quaternion inverseOrientation, Vector3f listenerPos, Vector3f currentPos, Vector3f result) {
         result.copy(currentPos);
