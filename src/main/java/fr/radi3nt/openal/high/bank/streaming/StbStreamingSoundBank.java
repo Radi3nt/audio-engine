@@ -8,7 +8,6 @@ import fr.radi3nt.openal.engine.format.SoundFormat;
 import fr.radi3nt.openal.engine.format.SoundResolution;
 import fr.radi3nt.openal.high.bank.stb.StbLoadInSoundBank;
 import fr.radi3nt.openal.high.bank.stb.StbSoundBank;
-import org.lwjgl.BufferUtils;
 
 import java.nio.ShortBuffer;
 import java.util.HashMap;
@@ -24,21 +23,29 @@ public class StbStreamingSoundBank implements StreamingSoundBank {
     }
 
     @Override
-    public boolean fillBuffer(SoundClip soundClip, AlSoundBuffer soundBuffer, int samplePos, int sampleLength) {
+    public boolean fillBuffer(SoundClip soundClip, AlSoundBuffer soundBuffer, ShortBuffer pcm, int streamingSampleLength) {
         StbSound sound = stbMap.computeIfAbsent(soundClip, stbSoundBank::getSound);
-        ShortBuffer pcm = BufferUtils.createShortBuffer(sound.channels * sampleLength);
 
+        pcm.clear();
+        pcm.limit(streamingSampleLength);
         boolean hitEnd = StbLoadInSoundBank.fillSamples(pcm, sound);
+        pcm.flip();
+
+        if (hitEnd) {
+            return true;
+        }
 
         SoundFormat soundFormat = new SoundFormat(SoundChannel.from(sound.channels), SoundResolution.BIT_16);
         soundBuffer.fill(pcm, sound.sampleRate, soundFormat.getAlId());
 
-        return hitEnd;
+        return false;
     }
 
     @Override
     public void seekBegin(SoundClip soundClip) {
-        StbSound sound = stbMap.computeIfAbsent(soundClip, stbSoundBank::getSound);
-        sound.seek(0);
+        StbSound sound = stbMap.get(soundClip);
+        if (sound==null)
+            return;
+        sound.seekStart();
     }
 }

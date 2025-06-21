@@ -17,17 +17,12 @@ import java.nio.ShortBuffer;
 public class StbLoadInSoundBank implements LoadInSoundBank, StbSoundBank {
 
     public static boolean fillSamples(ShortBuffer pcm, StbSound sound) {
-        int samples = 0;
-        while (samples < pcm.capacity()) {
-            pcm.position(samples);
-            int samplesPerChannel = sound.getSamples(pcm);
-            if (samplesPerChannel == 0) {
-                pcm.limit(samples);
-                return true;
-            }
-
-            samples += samplesPerChannel * sound.channels;
+        int samplesPerChannel = sound.getSamples(pcm);
+        if (samplesPerChannel == 0) {
+            return true;
         }
+
+        pcm.position(samplesPerChannel * sound.channels);
         return false;
     }
 
@@ -36,9 +31,9 @@ public class StbLoadInSoundBank implements LoadInSoundBank, StbSoundBank {
         StbSound sound = getSound(soundClip);
 
         ShortBuffer pcm = BufferUtils.createShortBuffer(sound.channels * sound.sampleLength);
-
         fillSamples(pcm, sound);
 
+        pcm.flip();
         sound.delete();
 
         SoundFormat soundFormat = new SoundFormat(SoundChannel.from(sound.channels), SoundResolution.BIT_16);

@@ -6,16 +6,22 @@ import fr.radi3nt.openal.engine.clip.SoundClip;
 import fr.radi3nt.openal.high.bank.streaming.StreamingSoundBank;
 import fr.radi3nt.openal.high.gain.PercentModifier;
 import fr.radi3nt.openal.high.gain.SetPercentModifier;
+import org.lwjgl.BufferUtils;
+
+import java.nio.ShortBuffer;
+import java.util.Arrays;
 
 public class StreamingSoundBankAudioPlayback implements AudioPlayback {
 
+    private static final int MAX_CHANNELS = 16;
+
     private final StreamingSoundBank soundBank;
+    private final ShortBuffer pcm;
     private final int streamingSampleLength;
     private final int bufferAmount;
 
     private AlSoundSource source;
     private SoundClip soundClip;
-    private int streamingCurrent;
 
     private AlSoundBuffer[] initialBuffers;
 
@@ -27,6 +33,7 @@ public class StreamingSoundBankAudioPlayback implements AudioPlayback {
         this.soundBank = soundBank;
         this.streamingSampleLength = streamingSampleLength;
         this.bufferAmount = bufferAmount;
+        pcm = BufferUtils.createShortBuffer(MAX_CHANNELS * streamingSampleLength);
     }
 
     @Override
@@ -60,7 +67,6 @@ public class StreamingSoundBankAudioPlayback implements AudioPlayback {
     @Override
     public void play() {
         playing = true;
-        streamingCurrent = 0;
         reachedEnd = false;
 
         source.setBuffer(0);
@@ -81,7 +87,6 @@ public class StreamingSoundBankAudioPlayback implements AudioPlayback {
     @Override
     public void stop() {
         playing = false;
-        streamingCurrent = 0;
         reachedEnd = false;
         source.stop();
     }
@@ -108,37 +113,38 @@ public class StreamingSoundBankAudioPlayback implements AudioPlayback {
         if (!playing || (reachedEnd && !source.isPlaying() && !looping))
             return;
 
-        int[] buffers = source.unQueueBuffers();
-        boolean done = false;
-        for (int i = 0; i < buffers.length; i++) {
-            int buffer = buffers[i];
-            if (buffer==0)
-                continue;
-            if (done) {
-                buffers[i] = 0;
-                continue;
+        int endingBuffer = 0;
+
+        if (!reachedEnd) {
+            int[] buffers = source.unQueueBuffers();
+            for (int buffer : buffers) {
+                if (fillBuffer(AlSoundBuffer.from(buffer)))
+                    break;
+                endingBuffer++;
             }
-            done = fillBuffer(AlSoundBuffer.from(buffer));
-        }
-        if (done) {
-            reachedEnd = true;
-        }
+            if (endingBuffer != buffers.length) {
+                reachedEnd = true;
+            }
 
-        if (!source.isPlaying() && !reachedEnd) {
-            source.play();
-        }
+            if (!source.isPlaying() && !reachedEnd) {
+                source.play();
+            }
 
-        source.queueBuffer(buffers);
+            if (endingBuffer!=buffers.length && endingBuffer>0) {
+                source.queueBuffer(Arrays.copyOf(buffers, endingBuffer));
+            } else {
+                source.queueBuffer(buffers);
+            }
+        }
     }
 
     private boolean fillBuffer(AlSoundBuffer buffer) {
-        boolean done = soundBank.fillBuffer(soundClip, buffer, streamingCurrent * streamingSampleLength, streamingSampleLength);
+        boolean done = soundBank.fillBuffer(soundClip, buffer, pcm, streamingSampleLength);
         if (done && looping) {
             soundBank.seekBegin(soundClip);
-            streamingCurrent = 0;
+            soundBank.fillBuffer(soundClip, buffer, pcm, streamingSampleLength);
             return false;
-        } else
-            streamingCurrent++;
+        }
         return done;
     }
 

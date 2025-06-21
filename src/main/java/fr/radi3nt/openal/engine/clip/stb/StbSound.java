@@ -55,7 +55,14 @@ public class StbSound {
             sampleRate = info.sample_rate();
         }
 
-        int samplesLength = stb_vorbis_stream_length_in_samples(handle);
+        int samplesLength;
+        try (MemoryStack stack = stackPush()) {
+            IntBuffer error = stack.mallocInt(1);
+            samplesLength = stb_vorbis_stream_length_in_samples(handle);
+            int currentError = error.get(0);
+            if (currentError!=VORBIS__no_error)
+                System.out.println("Vorbis error while getting stream length: " + currentError);
+        }
         return new StbSound(handle, channels, sampleRate, samplesLength, encoded);
     }
 
@@ -78,7 +85,15 @@ public class StbSound {
     }
 
     public int getSamples(ShortBuffer pcm) {
-        return stb_vorbis_get_samples_short_interleaved(memoryHandle, channels, pcm);
+        try (MemoryStack stack = stackPush()) {
+            IntBuffer error = stack.mallocInt(1);
+            int value = stb_vorbis_get_samples_short_interleaved(memoryHandle, channels, pcm);
+            int errorValue = error.get(0);
+            if (errorValue != VORBIS__no_error && errorValue!=VORBIS_need_more_data) {
+                System.out.println("Vorbis error while getting samples: " + errorValue);
+            }
+            return value;
+        }
     }
 
     public void seek(int sampleIndex) {
@@ -88,13 +103,33 @@ public class StbSound {
             stb_vorbis_seek(memoryHandle, sampleIndex);
             currentError = error.get(0);
         }
+        if (currentError==VORBIS__no_error)
+            return;
+        System.out.println("Vorbis error while seeking: " + currentError);
+    }
+
+    public void seekStart() {
+        int currentError;
+        try (MemoryStack stack = stackPush()) {
+            IntBuffer error = stack.mallocInt(1);
+            stb_vorbis_seek_start(memoryHandle);
+            currentError = error.get(0);
+        }
         if (currentError==VORBIS__no_error || currentError==VORBIS_need_more_data)
             return;
-        System.out.println("Vorbis error: " + currentError);
+        System.out.println("Vorbis error while seeking start: " + currentError);
     }
 
     public void delete() {
-        stb_vorbis_close(memoryHandle);
+        int currentError;
+        try (MemoryStack stack = stackPush()) {
+            IntBuffer error = stack.mallocInt(1);
+            stb_vorbis_close(memoryHandle);
+            currentError = error.get(0);
+        }
+        if (currentError==VORBIS__no_error)
+            return;
+        System.out.println("Vorbis error while closing: " + currentError);
     }
 
 
