@@ -17,6 +17,10 @@ public interface AudioSource {
         return play(clip, 1f, 1f);
     }
 
+    default SoundHandle play(SoundClip clip, PercentModifier gain) {
+        return play(clip, gain, SetPercentModifier.NO_MODIFIER);
+    }
+
     void update();
 
 }
