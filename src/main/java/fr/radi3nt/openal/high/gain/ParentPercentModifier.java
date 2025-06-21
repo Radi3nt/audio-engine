@@ -1,5 +1,7 @@
 package fr.radi3nt.openal.high.gain;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class ParentPercentModifier implements PercentModifier {
@@ -8,6 +10,10 @@ public class ParentPercentModifier implements PercentModifier {
 
     public ParentPercentModifier(Collection<PercentModifier> gain) {
         this.gain = gain;
+    }
+
+    public ParentPercentModifier(PercentModifier... gain) {
+        this.gain = new ArrayList<>(Arrays.asList(gain));
     }
 
     public Collection<PercentModifier> getModifiers() {
